@@ -3,6 +3,8 @@ import "./App.css";
 import { useMultistep } from "./hooks/useMultistep";
 import { WeightForm } from "./forms/WeightForm";
 import { FoodKindForm } from "./forms/FoodKindForm";
+import { OpeningHoursForm } from "./forms/OpeningHoursForm";
+import { MaxPriceForm } from "./forms/MaxPriceForm";
 
 type InputData = {
   localizationWeight: number;
@@ -10,14 +12,18 @@ type InputData = {
   priceWeight: number;
   hoursWeight: number;
   decorTypeWeight: number;
+  openingHours: [string, string];
+  maxPrice: number;
 };
 
-const INITIAL_DATA = {
+const INITIAL_DATA: InputData = {
   localizationWeight: 1,
   foodKindWeight: 1,
   priceWeight: 1,
   hoursWeight: 1,
   decorTypeWeight: 1,
+  openingHours: ["00:00:00", "23:59:00"],
+  maxPrice: 200,
 };
 
 function App() {
@@ -31,6 +37,8 @@ function App() {
     useMultistep([
       <WeightForm {...data} updateData={updateFields} />,
       <FoodKindForm />,
+      <OpeningHoursForm openingHours={data.openingHours} updateData={updateFields} />,
+      <MaxPriceForm maxPrice={data.maxPrice} updateData={updateFields} />,
     ]);
 
   return (
