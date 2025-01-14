@@ -3,6 +3,8 @@ import "./App.css";
 import { useMultistep } from "./hooks/useMultistep";
 import { WeightForm } from "./forms/WeightForm";
 import { FoodKindForm } from "./forms/FoodKindForm";
+import { DecorType, FoodKindType } from "./types";
+import { DecorTypeForm } from "./forms/DecorTypeForm";
 
 type InputData = {
   localizationWeight: number;
@@ -10,6 +12,8 @@ type InputData = {
   priceWeight: number;
   hoursWeight: number;
   decorTypeWeight: number;
+  foodKinds: FoodKindType[];
+  decorTypes: DecorType[];
 };
 
 const INITIAL_DATA = {
@@ -18,6 +22,8 @@ const INITIAL_DATA = {
   priceWeight: 1,
   hoursWeight: 1,
   decorTypeWeight: 1,
+  foodKinds: [] as FoodKindType[],
+  decorTypes: [] as DecorType[],
 };
 
 function App() {
@@ -30,7 +36,8 @@ function App() {
   const { steps, currentStepIndex, step, isFirstStep, isLastStep, next, back } =
     useMultistep([
       <WeightForm {...data} updateData={updateFields} />,
-      <FoodKindForm />,
+      <FoodKindForm {...data} updateData={updateFields} />,
+      <DecorTypeForm {...data} updateData={updateFields} />,
     ]);
 
   return (
@@ -44,7 +51,9 @@ function App() {
             {currentStepIndex + 1} / {steps.length}
           </div>
           {step}
-          <div style={{ display: "flex", gap: ".5rem" }}>
+          <div
+            style={{ display: "flex", gap: ".5rem", justifyContent: "center" }}
+          >
             {!isFirstStep && <button onClick={back}>Wróć</button>}
             <button onClick={next}>{isLastStep ? "Zakończ" : "Dalej"}</button>
           </div>
