@@ -21,6 +21,7 @@ main {
 .container {
   width: 100vw;
   margin: 0 10%;
+  padding-top: 2rem;
 }
 
 button {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { useMultistep } from "./hooks/useMultistep";
 import { WeightForm } from "./forms/WeightForm";
@@ -18,6 +18,8 @@ type InputData = {
   maxPrice: number;
   foodKinds: FoodKindType[];
   decorTypes: DecorType[];
+  localizationHeight: number;
+  localizationWidth: number;
 };
 
 const INITIAL_DATA: InputData = {
@@ -30,6 +32,8 @@ const INITIAL_DATA: InputData = {
   maxPrice: 200,
   foodKinds: [],
   decorTypes: [],
+  localizationHeight: 0,
+  localizationWidth: 0,
 };
 
 function App() {
@@ -44,9 +48,58 @@ function App() {
       <WeightForm {...data} updateData={updateFields} />,
       <FoodKindForm {...data} updateData={updateFields} />,
       <DecorTypeForm {...data} updateData={updateFields} />,
-      <OpeningHoursForm openingHours={data.openingHours} updateData={updateFields} />,
+      <OpeningHoursForm
+        openingHours={data.openingHours}
+        updateData={updateFields}
+      />,
       <MaxPriceForm maxPrice={data.maxPrice} updateData={updateFields} />,
     ]);
+
+  const getUserLocation = () => {
+    // if geolocation is supported by the users browser
+    if (navigator.geolocation) {
+      // get the current users location
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          // save the geolocation coordinates in two variables
+          const { latitude, longitude } = position.coords;
+          // update the value of userlocation variable
+          updateFields({
+            localizationWidth: latitude,
+            localizationHeight: longitude,
+          });
+        },
+        // if there was an error getting the users location
+        (error) => {
+          console.error("Error getting user location:", error);
+        }
+      );
+    }
+    // if geolocation is not supported by the users browser
+    else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  };
+
+  useEffect(() => {
+    getUserLocation();
+  });
+
+  async function onSubmit() {
+    if (!isLastStep) return next();
+
+    await fetch(
+      "https://restaurant-decision-support-backend.kamil.info.pl/api/v1/restaurants/score",
+      {
+        method: "POST",
+        mode: "no-cors",
+        headers: [["Content-Type", "application/json"]],
+        body: JSON.stringify(data),
+      }
+    ).then((response) => {
+      console.log(response);
+    });
+  }
 
   return (
     <>
@@ -55,15 +108,17 @@ function App() {
       </header>
       <main>
         <div className="container">
-          <div>
-            {currentStepIndex + 1} / {steps.length}
-          </div>
           {step}
           <div
             style={{ display: "flex", gap: ".5rem", justifyContent: "center" }}
           >
             {!isFirstStep && <button onClick={back}>Wróć</button>}
-            <button onClick={next}>{isLastStep ? "Zakończ" : "Dalej"}</button>
+            <button onClick={onSubmit}>
+              {isLastStep ? "Zakończ" : "Dalej"}
+            </button>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            {currentStepIndex + 1} / {steps.length}
           </div>
         </div>
       </main>
