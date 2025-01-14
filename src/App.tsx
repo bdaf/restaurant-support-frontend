@@ -5,6 +5,8 @@ import { WeightForm } from "./forms/WeightForm";
 import { FoodKindForm } from "./forms/FoodKindForm";
 import { OpeningHoursForm } from "./forms/OpeningHoursForm";
 import { MaxPriceForm } from "./forms/MaxPriceForm";
+import { DecorType, FoodKindType } from "./types";
+import { DecorTypeForm } from "./forms/DecorTypeForm";
 
 type InputData = {
   localizationWeight: number;
@@ -14,6 +16,8 @@ type InputData = {
   decorTypeWeight: number;
   openingHours: [string, string];
   maxPrice: number;
+  foodKinds: FoodKindType[];
+  decorTypes: DecorType[];
 };
 
 const INITIAL_DATA: InputData = {
@@ -24,6 +28,8 @@ const INITIAL_DATA: InputData = {
   decorTypeWeight: 1,
   openingHours: ["00:00:00", "23:59:00"],
   maxPrice: 200,
+  foodKinds: [],
+  decorTypes: [],
 };
 
 function App() {
@@ -36,7 +42,8 @@ function App() {
   const { steps, currentStepIndex, step, isFirstStep, isLastStep, next, back } =
     useMultistep([
       <WeightForm {...data} updateData={updateFields} />,
-      <FoodKindForm />,
+      <FoodKindForm {...data} updateData={updateFields} />,
+      <DecorTypeForm {...data} updateData={updateFields} />,
       <OpeningHoursForm openingHours={data.openingHours} updateData={updateFields} />,
       <MaxPriceForm maxPrice={data.maxPrice} updateData={updateFields} />,
     ]);
@@ -52,7 +59,9 @@ function App() {
             {currentStepIndex + 1} / {steps.length}
           </div>
           {step}
-          <div style={{ display: "flex", gap: ".5rem" }}>
+          <div
+            style={{ display: "flex", gap: ".5rem", justifyContent: "center" }}
+          >
             {!isFirstStep && <button onClick={back}>Wróć</button>}
             <button onClick={next}>{isLastStep ? "Zakończ" : "Dalej"}</button>
           </div>

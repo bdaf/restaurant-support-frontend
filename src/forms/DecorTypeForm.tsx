@@ -1,27 +1,24 @@
-import { FoodKindType } from "../types";
+import { DecorType } from "../types";
 import { FormWrapper } from "./FormWrapper";
 
-type FoodKindData = {
-  foodKinds: FoodKindType[];
+type DecorTypeData = {
+  decorTypes: DecorType[];
 };
 
-type FoodKindFormProps = FoodKindData & {
-  updateData: (fields: FoodKindData) => void;
+type DecorTypeProps = DecorTypeData & {
+  updateData: (fields: DecorTypeData) => void;
 };
 
-export function FoodKindForm({ foodKinds, updateData }: FoodKindFormProps) {
+export function DecorTypeForm({ decorTypes, updateData }: DecorTypeProps) {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
       updateData({
-        foodKinds: [
-          ...foodKinds,
-          FoodKindType[e.currentTarget.id as FoodKindType],
-        ],
+        decorTypes: [...decorTypes, DecorType[e.currentTarget.id as DecorType]],
       });
     } else {
       updateData({
-        foodKinds: foodKinds.filter(
-          (x) => x !== FoodKindType[e.currentTarget.id as FoodKindType]
+        decorTypes: decorTypes.filter(
+          (x) => x !== DecorType[e.currentTarget.id as DecorType]
         ),
       });
     }
@@ -29,8 +26,8 @@ export function FoodKindForm({ foodKinds, updateData }: FoodKindFormProps) {
 
   return (
     <FormWrapper
-      title="Rodzaj jedzenia"
-      description="Wybierz interesujące cię rodzaje jedzenie"
+      title="Rodzaj wystroju"
+      description="Wybierz interesujące cię rodzaje wystroju"
     >
       <div
         style={{
@@ -52,16 +49,16 @@ export function FoodKindForm({ foodKinds, updateData }: FoodKindFormProps) {
           }}
         >
           <input
-            id={FoodKindType.ASIAN}
+            id={DecorType.POLISH}
             style={{
               width: "1.5rem",
               height: "1.5rem",
             }}
             type="checkbox"
-            checked={foodKinds.includes(FoodKindType.ASIAN)}
+            checked={decorTypes.includes(DecorType.POLISH)}
             onChange={handleChange}
           />
-          Azjatyckie
+          Polski
         </label>
         <label
           style={{
@@ -74,16 +71,16 @@ export function FoodKindForm({ foodKinds, updateData }: FoodKindFormProps) {
           }}
         >
           <input
-            id={FoodKindType.POLISH}
+            id={DecorType.ITALY}
             style={{
               width: "1.5rem",
               height: "1.5rem",
             }}
             type="checkbox"
-            checked={foodKinds.includes(FoodKindType.POLISH)}
+            checked={decorTypes.includes(DecorType.ITALY)}
             onChange={handleChange}
           />
-          Polskie
+          Włoski
         </label>
         <label
           style={{
@@ -96,16 +93,16 @@ export function FoodKindForm({ foodKinds, updateData }: FoodKindFormProps) {
           }}
         >
           <input
-            id={FoodKindType.SOPHISTICATED}
+            id={DecorType.HISTORICAL}
             style={{
               width: "1.5rem",
               height: "1.5rem",
             }}
             type="checkbox"
-            checked={foodKinds.includes(FoodKindType.SOPHISTICATED)}
+            checked={decorTypes.includes(DecorType.HISTORICAL)}
             onChange={handleChange}
           />
-          Wykwintne
+          Starodawny
         </label>
         <label
           style={{
@@ -118,16 +115,16 @@ export function FoodKindForm({ foodKinds, updateData }: FoodKindFormProps) {
           }}
         >
           <input
-            id={FoodKindType.BURGER}
+            id={DecorType.MODERN}
             style={{
               width: "1.5rem",
               height: "1.5rem",
             }}
             type="checkbox"
-            checked={foodKinds.includes(FoodKindType.BURGER)}
+            checked={decorTypes.includes(DecorType.MODERN)}
             onChange={handleChange}
           />
-          Burgery
+          Nowoczesny
         </label>
         <label
           style={{
@@ -140,16 +137,16 @@ export function FoodKindForm({ foodKinds, updateData }: FoodKindFormProps) {
           }}
         >
           <input
-            id={FoodKindType.TATAR}
+            id={DecorType.ORIGINAL}
             style={{
               width: "1.5rem",
               height: "1.5rem",
             }}
             type="checkbox"
-            checked={foodKinds.includes(FoodKindType.TATAR)}
+            checked={decorTypes.includes(DecorType.ORIGINAL)}
             onChange={handleChange}
           />
-          Tatar
+          Oryginalny
         </label>
         <label
           style={{
@@ -162,16 +159,16 @@ export function FoodKindForm({ foodKinds, updateData }: FoodKindFormProps) {
           }}
         >
           <input
-            id={FoodKindType.HUNGARY}
+            id={DecorType.STANDARD}
             style={{
               width: "1.5rem",
               height: "1.5rem",
             }}
             type="checkbox"
-            checked={foodKinds.includes(FoodKindType.HUNGARY)}
+            checked={decorTypes.includes(DecorType.STANDARD)}
             onChange={handleChange}
           />
-          Węgierskie
+          Standardowy
         </label>
         <label
           style={{
@@ -184,60 +181,16 @@ export function FoodKindForm({ foodKinds, updateData }: FoodKindFormProps) {
           }}
         >
           <input
-            id={FoodKindType.PIEROGI}
+            id={DecorType.WARM}
             style={{
               width: "1.5rem",
               height: "1.5rem",
             }}
             type="checkbox"
-            checked={foodKinds.includes(FoodKindType.PIEROGI)}
+            checked={decorTypes.includes(DecorType.WARM)}
             onChange={handleChange}
           />
-          Pierogi
-        </label>
-        <label
-          style={{
-            width: "min-content",
-            display: "flex",
-            flexDirection: "column-reverse",
-            gap: ".25rem",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <input
-            id={FoodKindType.STEAK}
-            style={{
-              width: "1.5rem",
-              height: "1.5rem",
-            }}
-            type="checkbox"
-            checked={foodKinds.includes(FoodKindType.STEAK)}
-            onChange={handleChange}
-          />
-          Steki
-        </label>
-        <label
-          style={{
-            width: "min-content",
-            display: "flex",
-            flexDirection: "column-reverse",
-            gap: ".25rem",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <input
-            id={FoodKindType.PIZZA}
-            style={{
-              width: "1.5rem",
-              height: "1.5rem",
-            }}
-            type="checkbox"
-            checked={foodKinds.includes(FoodKindType.PIZZA)}
-            onChange={handleChange}
-          />
-          Pizza
+          Przytulny
         </label>
       </div>
     </FormWrapper>
