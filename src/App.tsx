@@ -5,8 +5,9 @@ import { WeightForm } from "./forms/WeightForm";
 import { FoodKindForm } from "./forms/FoodKindForm";
 import { OpeningHoursForm } from "./forms/OpeningHoursForm";
 import { MaxPriceForm } from "./forms/MaxPriceForm";
-import { DecorType, FoodKindType } from "./types";
+import { DecorType, FoodKindType, RestaurantScore } from "./types";
 import { DecorTypeForm } from "./forms/DecorTypeForm";
+import { ReastaurantsList } from "./RestaurantsList";
 
 type InputData = {
   localizationWeight: number;
@@ -14,8 +15,9 @@ type InputData = {
   priceWeight: number;
   hoursWeight: number;
   decorTypeWeight: number;
-  openingHours: [string, string];
-  maxPrice: number;
+  openHour: string;
+  closeHour: string;
+  price: number;
   foodKinds: FoodKindType[];
   decorTypes: DecorType[];
   localizationHeight: number;
@@ -28,8 +30,9 @@ const INITIAL_DATA: InputData = {
   priceWeight: 1,
   hoursWeight: 1,
   decorTypeWeight: 1,
-  openingHours: ["00:00:00", "23:59:00"],
-  maxPrice: 200,
+  openHour: "00:00:00",
+  closeHour: "23:59:00",
+  price: 200,
   foodKinds: [],
   decorTypes: [],
   localizationHeight: 0,
@@ -48,14 +51,12 @@ function App() {
       <WeightForm {...data} updateData={updateFields} />,
       <FoodKindForm {...data} updateData={updateFields} />,
       <DecorTypeForm {...data} updateData={updateFields} />,
-      <OpeningHoursForm
-        openingHours={data.openingHours}
-        updateData={updateFields}
-      />,
-      <MaxPriceForm maxPrice={data.maxPrice} updateData={updateFields} />,
+      <OpeningHoursForm {...data} updateData={updateFields} />,
+      <MaxPriceForm price={data.price} updateData={updateFields} />,
     ]);
+  const [restaurants, setRestaurants] = useState<RestaurantScore[]>();
 
-  const getUserLocation = () => {
+  useEffect(() => {
     // if geolocation is supported by the users browser
     if (navigator.geolocation) {
       // get the current users location
@@ -63,6 +64,7 @@ function App() {
         (position) => {
           // save the geolocation coordinates in two variables
           const { latitude, longitude } = position.coords;
+          console.log(position.coords);
           // update the value of userlocation variable
           updateFields({
             localizationWidth: latitude,
@@ -79,11 +81,7 @@ function App() {
     else {
       console.error("Geolocation is not supported by this browser.");
     }
-  };
-
-  useEffect(() => {
-    getUserLocation();
-  });
+  }, []);
 
   async function onSubmit() {
     if (!isLastStep) return next();
@@ -92,13 +90,18 @@ function App() {
       "https://restaurant-decision-support-backend.kamil.info.pl/api/v1/restaurants/score",
       {
         method: "POST",
-        mode: "no-cors",
-        headers: [["Content-Type", "application/json"]],
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       }
-    ).then((response) => {
-      console.log(response);
-    });
+    )
+      .then((response) => {
+        if (response.ok) return response.json();
+        console.error(response);
+      })
+      .then((data: RestaurantScore[]) => {
+        if (!data) return;
+        setRestaurants(data.sort((a, b) => b.score - a.score));
+      });
   }
 
   return (
@@ -108,18 +111,35 @@ function App() {
       </header>
       <main>
         <div className="container">
-          {step}
-          <div
-            style={{ display: "flex", gap: ".5rem", justifyContent: "center" }}
-          >
-            {!isFirstStep && <button onClick={back}>Wróć</button>}
-            <button onClick={onSubmit}>
-              {isLastStep ? "Zakończ" : "Dalej"}
-            </button>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            {currentStepIndex + 1} / {steps.length}
-          </div>
+          {!restaurants ? (
+            <>
+              {step}
+              <div
+                style={{
+                  display: "flex",
+                  gap: ".5rem",
+                  justifyContent: "center",
+                  marginBottom: ".5rem",
+                }}
+              >
+                {!isFirstStep && <button onClick={back}>Wróć</button>}
+                <button onClick={onSubmit}>
+                  {isLastStep ? "Zakończ" : "Dalej"}
+                </button>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                {currentStepIndex + 1} / {steps.length}
+              </div>
+            </>
+          ) : (
+            <ReastaurantsList
+              restaurants={restaurants}
+              userLocation={{
+                latitude: data.localizationWidth,
+                longitude: data.localizationHeight,
+              }}
+            />
+          )}
         </div>
       </main>
     </>

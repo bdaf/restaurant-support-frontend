@@ -18,11 +18,11 @@ type WeightFormProps = WeightData & {
 };
 
 const COLUMNS: ColumnType[] = [
-  { id: 1, title: "Bardzo istotne - 5" },
-  { id: 0.75, title: "Istotne - 4" },
-  { id: 0.5, title: "Średnio istotne - 3" },
-  { id: 0.25, title: "Mało istotne - 2" },
-  { id: 0, title: "Nieistotne - 1" },
+  { id: 1, title: "Bardzo istotne" },
+  { id: 0.75, title: "Istotne" },
+  { id: 0.5, title: "Średnio istotne" },
+  { id: 0.25, title: "Mało istotne" },
+  { id: 0, title: "Nieistotne" },
 ];
 
 const INITIAL_CATEGORIES: Category[] = [

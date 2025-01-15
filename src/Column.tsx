@@ -23,7 +23,9 @@ export function Column({ column, categories }: ColumnProps) {
         backgroundColor: "dimgray",
       }}
     >
-      <h3 style={{ paddingBottom: ".25rem" }}>{column.title}</h3>
+      <h3 style={{ paddingBottom: ".25rem", textAlign: "center" }}>
+        {column.title}
+      </h3>
       <div
         ref={setNodeRef}
         style={{

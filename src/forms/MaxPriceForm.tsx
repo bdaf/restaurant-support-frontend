@@ -3,25 +3,25 @@ import { FormWrapper } from "./FormWrapper";
 import { Range } from "react-range";
 
 type MaxPriceFormProps = {
-  maxPrice: number;
-  updateData: (fields: Partial<{ maxPrice: number }>) => void;
+  price: number;
+  updateData: (fields: Partial<{ price: number }>) => void;
 };
 
 const MIN = 10;
 const MAX = 200;
 
-export function MaxPriceForm({ maxPrice, updateData }: MaxPriceFormProps) {
-  const [value, setValue] = useState<number>(maxPrice);
+export function MaxPriceForm({ price, updateData }: MaxPriceFormProps) {
+  const [value, setValue] = useState<number>(price);
 
   const handleChange = (newValue: number[]) => {
     setValue(newValue[0]);
-    updateData({ maxPrice: newValue[0] });
+    updateData({ price: newValue[0] });
   };
 
   return (
     <FormWrapper
-      title="Maksymalna cena dania"
-      description="Wybierz maksymalną cenę dania, która Cię interesuje"
+      title="Średnia cena dania"
+      description="Wybierz uśrednioną cenę dania, która Cię interesuje"
     >
       <div style={{ padding: "1rem", textAlign: "center" }}>
         <Range
@@ -72,7 +72,7 @@ export function MaxPriceForm({ maxPrice, updateData }: MaxPriceFormProps) {
             textAlign: "center",
           }}
         >
-          Maksymalna cena: {value} zł
+          Uśredniona cena: {value} zł
         </div>
       </div>
     </FormWrapper>

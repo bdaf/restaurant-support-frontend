@@ -29,6 +29,7 @@ button {
   border-radius: 0.25em;
   border: none;
   font-weight: bold;
+  width: fit-content;
 }
 
 button:hover {
@@ -55,4 +56,34 @@ button:disabled {
 
 input[type="checkbox"]:hover {
   cursor: pointer;
+}
+
+div.restaurant {
+  border-bottom: 1px solid gray;
+  padding: 0.5em 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+div.restaurant:last-child {
+  border-bottom: none;
+}
+
+a {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:link,
+a:visited {
+  color: white;
+}
+
+a:hover {
+  opacity: 85%;
+  text-decoration: underline;
+}
+
+div.restaurantList {
+  width: clamp(500px, 50%, 100vw);
 }

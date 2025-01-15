@@ -10,6 +10,20 @@ export type Category = {
   weight: number;
 };
 
+export type RestaurantScore = {
+  id: number;
+  score: number;
+  name: string;
+  openHour: string;
+  closeHour: string;
+  decorTypes: DecorType[];
+  foodKinds: FoodKindType[];
+  priceMin: number;
+  priceMax: number;
+  localizationHeight: number;
+  localizationWidth: number;
+};
+
 export enum FoodKindType {
   ASIAN = "ASIAN",
   POLISH = "POLISH",
