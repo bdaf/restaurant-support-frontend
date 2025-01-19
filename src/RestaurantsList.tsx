@@ -14,8 +14,9 @@ export function ReastaurantsList({
   restaurants,
   userLocation,
 }: RestaurantsListProps) {
-  const [displayCount, setDisplayCount] = useState(DISPLAY_COUNT_STEP);
   const mapLink: string = "https://www.google.com/maps/search/?api=1&query=";
+  const [displayCount, setDisplayCount] = useState(DISPLAY_COUNT_STEP);
+  const [popOverID, setPopOverID] = useState<number>();
 
   function getGradientColor(percentage: number) {
     percentage = Math.min(100, Math.max(0, percentage));
@@ -32,6 +33,14 @@ export function ReastaurantsList({
     return `rgb(${red}, ${green}, 0)`;
   }
 
+  function togglePopOver(id: number) {
+    if (id !== popOverID) {
+      setPopOverID(id);
+      return;
+    }
+    setPopOverID(undefined);
+  }
+
   return (
     <div
       style={{
@@ -42,11 +51,16 @@ export function ReastaurantsList({
       }}
     >
       <h2 style={{ textAlign: "center" }}>
-        Restaurajce najbardziej dopasowane do twoich preferencji
+        Restauracje najbardziej dopasowane do twoich preferencji
       </h2>
       <div className="restaurantList">
         {restaurants.slice(0, displayCount).map((restaurant) => (
-          <div className="restaurant" key={restaurant.id}>
+          <div
+            className="restaurant"
+            data-id={restaurant.ID}
+            onClick={() => togglePopOver(restaurant.ID)}
+            key={restaurant.ID}
+          >
             <div>
               <a
                 href={`${mapLink}${restaurant.localizationHeight}%2C${restaurant.localizationWidth}`}
@@ -75,6 +89,40 @@ export function ReastaurantsList({
                 100}
               %
             </div>
+            {popOverID === restaurant.ID && (
+              <div className="popOver">
+                <p>
+                  <div style={{ fontWeight: "bold" }}>Lokalizacja: </div>
+                  <div style={{ fontStyle: "italic" }}>
+                    {restaurant.localizationComment}
+                  </div>
+                </p>
+                <p>
+                  <div style={{ fontWeight: "bold" }}>Rodzaj jedzenia: </div>
+                  <div style={{ fontStyle: "italic" }}>
+                    {restaurant.foodKindComment}
+                  </div>
+                </p>
+                <p>
+                  <div style={{ fontWeight: "bold" }}>Rodzaj wystroju: </div>
+                  <div style={{ fontStyle: "italic" }}>
+                    {restaurant.decorTypeComment}
+                  </div>
+                </p>
+                <p>
+                  <div style={{ fontWeight: "bold" }}>Godziny otwarcia: </div>
+                  <div style={{ fontStyle: "italic" }}>
+                    {restaurant.hourComment}
+                  </div>
+                </p>
+                <p>
+                  <div style={{ fontWeight: "bold" }}>Średnie cena: </div>
+                  <div style={{ fontStyle: "italic" }}>
+                    {restaurant.prizeComment}
+                  </div>
+                </p>
+              </div>
+            )}
           </div>
         ))}
       </div>

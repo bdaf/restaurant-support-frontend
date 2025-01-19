@@ -11,7 +11,7 @@ export type Category = {
 };
 
 export type RestaurantScore = {
-  id: number;
+  ID: number;
   score: number;
   name: string;
   openHour: string;
@@ -22,6 +22,11 @@ export type RestaurantScore = {
   priceMax: number;
   localizationHeight: number;
   localizationWidth: number;
+  prizeComment: string;
+  hourComment: string;
+  foodKindComment: string;
+  decorTypeComment: string;
+  localizationComment: string;
 };
 
 export enum FoodKindType {
